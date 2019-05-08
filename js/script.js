@@ -6,6 +6,9 @@ class Shape {
         this.width = width;
         this.shapeType = shapeType;
         this.borderRadius = getRandomInt(0, 100);
+        // this.rotate = getRandomInt(0, 100);
+        // this.scaleX = getRandomInt(0, 3);
+        // this.scaleY = getRandomInt(0, 3);
     }
 
     display() {
@@ -13,20 +16,16 @@ class Shape {
         $('.shape').css({
             "width": this.width,
             "height": this.height,
-            "borderRadius": this.borderRadius
+            "borderRadius": this.borderRadius,
+            "transform": "rotate(" + this.rotate + "deg) scaleX(" + this.scaleX + ") scaleY(" + this.scaleY + ")"
         });
     }
 
-    // grow() {
+    // transform() {
     //     $('.shape').css({
-    //         "width": this.width + "+=100%",
-    //         "height": this.height + "+=100%"
-    //     })
+    //         "transform": "rotate(" + this.rotate + "deg) scaleX(" + this.scaleX + ") scaleY(" + this.scaleY + ")"
+    //     });
     // }
-
-    transform() {
-    	// rotate, translate, scale
-    }
 }
 
 const shapeTypes = [
@@ -35,24 +34,39 @@ const shapeTypes = [
     "rectangle"
 ];
 
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+function animateShapeOnClick() {
+    $('.container').click(function() {
+        if ($('.shape').hasClass("animate")) {
+            $('.shape').removeClass("animate");
+        } else {
+            $('.shape').addClass("animate");
+        }
+    });
 }
 
-function init() {
+function triggerShapesOnScroll() {
     let shapes = [];
 
     $(window).scroll(function() {
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 1; i++) {
             let shapeType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
             shapes[i] = new Shape(getRandomInt(0, 500), getRandomInt(0, 500), getRandomInt(0, 500), getRandomInt(0, 500), shapeType);
         }
 
         for (let i = 0; i < shapes.length; i++) {
             shapes[i].display();
-            // shapes[i].grow();
         }
     });
+
+}
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function init() {
+    triggerShapesOnScroll();
+    animateShapeOnClick();
 }
 
 $(document).ready(init);

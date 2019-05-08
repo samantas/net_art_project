@@ -1,3 +1,21 @@
+@keyframes animate {
+    0% {
+        transform: rotate(0deg) skew(0deg, 0deg);
+    }
+
+    50% {
+        transform: rotate(180deg) skew(20deg, 30deg);
+    }
+
+    100% {
+        transform: rotate(360deg) skew(0deg, 0deg);
+    }
+}
+
+.animate {
+    animation: animate 2s infinite forwards ease-in-out;
+}
+
 html,
 body {
     max-width: 100%;
@@ -20,9 +38,12 @@ body {
 }
 
 .shape {
+    position: relative;
     display: flex;
     margin: 20px auto;
     border: 1px solid #fff;
+    transition: .5s ease;
+    z-index: 999;
 }
 
 .escher {
@@ -58,8 +79,4 @@ body {
     width: 100px;
     height: 100px;
     border: 1px solid #fff;
-}
-
-.z-top {
-    z-index: 99999;
 }
