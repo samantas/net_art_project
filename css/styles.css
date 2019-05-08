@@ -1,3 +1,17 @@
+@keyframes scaleInSlowly {
+    from {
+        transform: scale(1, 1);
+    }
+
+    to {
+        transform: scale(100, 100);
+    }
+}
+
+.scaleInSlowly {
+	animation: scaleInSlowly 1000s forwards ease-in;
+}
+
 @keyframes animate {
     0% {
         transform: rotate(0deg) skew(0deg, 0deg);
@@ -30,9 +44,9 @@ body {
 .container {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     justify-content: flex-start;
-    height: 5000px;
+    height: 9000px;
     width: 100%;
     box-sizing: border-box;
 }
@@ -48,8 +62,11 @@ body {
 
 .escher {
     position: fixed;
-    height: 100%;
+    top: 0;
+    left: 0;
+    height: auto;
     width: 100%;
+    z-index: 0;
 }
 
 .triangle {

@@ -34,6 +34,14 @@ const shapeTypes = [
     "rectangle"
 ];
 
+function playMusicOnScroll() {
+	// if scroll is within certain speed, playback rate normal
+
+	// if user scrolls too fast, playback rate 2x speed
+
+	// if user doesn't scroll at all, stop music
+}
+
 function animateShapeOnClick() {
     $('.container').click(function() {
         if ($('.shape').hasClass("animate")) {
@@ -44,13 +52,26 @@ function animateShapeOnClick() {
     });
 }
 
+// look into changing div size dynamically on scroll
+// https://stackoverflow.com/questions/31005636/adjust-div-height-dynamically-based-on-scroll
+
+// also look into changing saturation based on scroll
+// should be the most saturdated in the middle of scroll, i.e. peak of life
+// birth = black and white
+// peak = saturated colors
+// near death = black and white
+// deat = completely black
+
 function triggerShapesOnScroll() {
     let shapes = [];
+    let xCenter = window.innerWidth / 2;
+    let yCenter = window.innerHeight / 2;
 
     $(window).scroll(function() {
         for (let i = 0; i < 1; i++) {
             let shapeType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
-            shapes[i] = new Shape(getRandomInt(0, 500), getRandomInt(0, 500), getRandomInt(0, 500), getRandomInt(0, 500), shapeType);
+            // shapes[i] = new Shape(getRandomInt(0, 500), getRandomInt(0, 500), getRandomInt(0, 500), getRandomInt(0, 500), shapeType);
+            shapes[i] = new Shape(xCenter, yCenter, getRandomInt(0, 500), getRandomInt(0, 500), shapeType);
         }
 
         for (let i = 0; i < shapes.length; i++) {
@@ -67,6 +88,7 @@ function getRandomInt(min, max) {
 function init() {
     triggerShapesOnScroll();
     animateShapeOnClick();
+    $('.escher').addClass('scaleInSlowly');
 }
 
 $(document).ready(init);
