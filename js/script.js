@@ -1,11 +1,9 @@
 class Shape {
-    constructor(x, y, height, width, shapeType) {
-        this.x = x;
-        this.y = y;
+    constructor(height, width, shapeType) {
         this.height = height;
         this.width = width;
         this.shapeType = shapeType;
-        this.borderRadius = getRandomInt(0, 100);
+        // this.borderRadius = getRandomInt(0, 100);
         // this.rotate = getRandomInt(0, 100);
         // this.scaleX = getRandomInt(0, 3);
         // this.scaleY = getRandomInt(0, 3);
@@ -14,16 +12,20 @@ class Shape {
     display() {
         $('.container').append('<div class="shape ' + this.shapeType + '"></div>')
         $('.shape').css({
+            "position": "fixed",
+            "top": "50%",
+            "left": "50%",
             "width": this.width,
             "height": this.height,
             "borderRadius": this.borderRadius,
-            "transform": "rotate(" + this.rotate + "deg) scaleX(" + this.scaleX + ") scaleY(" + this.scaleY + ")"
+            "transform": "translate(-50%,-50%)"
+            // "transform": "translate(-50%,-50%) rotate(" + this.rotate + "deg) scaleX(" + this.scaleX + ") scaleY(" + this.scaleY + ")"
         });
     }
 
     // transform() {
     //     $('.shape').css({
-    //         "transform": "rotate(" + this.rotate + "deg) scaleX(" + this.scaleX + ") scaleY(" + this.scaleY + ")"
+    //         "transform": "translate(-50%,-50%) rotate(" + this.rotate + "deg) scaleX(" + this.scaleX + ") scaleY(" + this.scaleY + ")"
     //     });
     // }
 }
@@ -35,11 +37,11 @@ const shapeTypes = [
 ];
 
 function playMusicOnScroll() {
-	// if scroll is within certain speed, playback rate normal
+    // if scroll is within certain speed, playback rate normal
 
-	// if user scrolls too fast, playback rate 2x speed
+    // if user scrolls too fast, playback rate 2x speed
 
-	// if user doesn't scroll at all, stop music
+    // if user doesn't scroll at all, stop music
 }
 
 function animateShapeOnClick() {
@@ -62,21 +64,37 @@ function animateShapeOnClick() {
 // near death = black and white
 // deat = completely black
 
-function triggerShapesOnScroll() {
+function triggerAndTransformShapesOnScroll() {
     let shapes = [];
-    let xCenter = window.innerWidth / 2;
-    let yCenter = window.innerHeight / 2;
+
+    let shape = $('.shape');
+    let shapeHeight = shape.height();
+    let shapeWidth = shape.width();
+    let scrollPosition;
 
     $(window).scroll(function() {
-        for (let i = 0; i < 1; i++) {
-            let shapeType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
-            // shapes[i] = new Shape(getRandomInt(0, 500), getRandomInt(0, 500), getRandomInt(0, 500), getRandomInt(0, 500), shapeType);
-            shapes[i] = new Shape(xCenter, yCenter, getRandomInt(0, 500), getRandomInt(0, 500), shapeType);
+        let shapeType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
+        new Shape(getRandomInt(0, 1000), getRandomInt(0, 700), shapeType).display();
+
+        // for (let i = 0; i < 1; i++) {
+        //     let shapeType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
+        //     shapes[i] = new Shape(getRandomInt(0, 500), getRandomInt(0, 500), shapeType);
+        // }
+        // for (let i = 0; i < shapes.length; i++) {
+        //     shapes[i].display();
+        // }
+
+        // scrollPosition = $(this).scrollTop();
+        // shape.height(shapeHeight - scrollPosition);
+        // shape.width(shapeWidth - scrollPosition);
+
+        if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+            // fade everything out
+            $('.everything').animate({
+            	opacity: 0
+            }, 1000);
         }
 
-        for (let i = 0; i < shapes.length; i++) {
-            shapes[i].display();
-        }
     });
 
 }
@@ -86,7 +104,8 @@ function getRandomInt(min, max) {
 }
 
 function init() {
-    triggerShapesOnScroll();
+    $(this).scrollTop(0);
+    triggerAndTransformShapesOnScroll();
     animateShapeOnClick();
     $('.escher').addClass('scaleInSlowly');
 }
