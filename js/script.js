@@ -36,12 +36,20 @@ const shapeTypes = [
     "rectangle"
 ];
 
-function playMusicOnScroll() {
+function detectScrollBehavior() {
     // if scroll is within certain speed, playback rate normal
 
     // if user scrolls too fast, playback rate 2x speed
 
     // if user doesn't scroll at all, stop music
+
+    $(window).scroll(function() {
+        clearTimeout($.data(this, 'scrollTimer'));
+        $.data(this, 'scrollTimer', setTimeout(function() {
+            // do something
+            console.log("Haven't scrolled in 250ms!");
+        }, 250));
+    });
 }
 
 function animateShapeOnClick() {
@@ -66,7 +74,6 @@ function animateShapeOnClick() {
 
 function triggerAndTransformShapesOnScroll() {
     let shapes = [];
-
     let shape = $('.shape');
     let shapeHeight = shape.height();
     let shapeWidth = shape.width();
@@ -74,24 +81,47 @@ function triggerAndTransformShapesOnScroll() {
 
     $(window).scroll(function() {
         let shapeType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
-        new Shape(getRandomInt(0, 1000), getRandomInt(0, 700), shapeType).display();
+        let scroll = $(window).scrollTop();
+        let windowHeight = $(window).height();
+        let documentHeight = $(document).height();
 
-        // for (let i = 0; i < 1; i++) {
-        //     let shapeType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
-        //     shapes[i] = new Shape(getRandomInt(0, 500), getRandomInt(0, 500), shapeType);
+        // if (scroll === 500) {
+        // 	console.log("scroll = " + scroll);
+        //     $(window).off("scroll");
+        //     let newShape = new Shape(getRandomInt(0, 1000), getRandomInt(0, 700), shapeType).display();
+        //     $(newShape).fadeIn('slow', function() {
+        //         setTimeout(function() {
+        //             $(newShape).fadeOut('slow');
+        //             $(newShape).fadeIn('slow');
+        //             setTimeout(function() {
+        //                 $(newShape).fadeOut('slow');
+        //                 $(newShape).fadeIn('slow');
+        //                 setTimeout(function() {
+        //                     $(newShape).fadeOut('slow');
+        //                     $(newShape).fadeIn('slow');
+        //                 }, 2000)
+        //             }, 2000)
+        //         }, 2000);
+        //     })
         // }
-        // for (let i = 0; i < shapes.length; i++) {
-        //     shapes[i].display();
-        // }
+
+        for (let i = 0; i < 1; i++) {
+            let shapeType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
+            shapes[i] = new Shape(getRandomInt(0, 1000), getRandomInt(0, 700), shapeType);
+        }
+
+        for (let i = 0; i < shapes.length; i++) {
+            shapes[i].display();
+        }
 
         // scrollPosition = $(this).scrollTop();
         // shape.height(shapeHeight - scrollPosition);
         // shape.width(shapeWidth - scrollPosition);
 
-        if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+        if (scroll + windowHeight == documentHeight) {
             // fade everything out
             $('.everything').animate({
-            	opacity: 0
+                opacity: 0
             }, 1000);
         }
 
@@ -103,11 +133,32 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function checkIfAudioIsPlaying() {
+    let myAudio = $('#audio');
+
+    // ########################
+    // WHY IS THIS UNDEFINED???
+    console.log("duration: " + myAudio.duration);
+
+    if (myAudio.duration > 0 && !myAudio.paused) {
+        //Its playing...do your job
+        console.log("audio is playing");
+
+    } else {
+        //Not playing...maybe paused, stopped or never played.
+        console.log("audio is not playing");
+
+    }
+}
+
 function init() {
     $(this).scrollTop(0);
     triggerAndTransformShapesOnScroll();
     animateShapeOnClick();
     $('.escher').addClass('scaleInSlowly');
+
+    detectScrollBehavior();
+    checkIfAudioIsPlaying();
 }
 
 $(document).ready(init);
