@@ -214,7 +214,7 @@ var checkScrollSpeed = (function(settings) {
 let scrolldelay;
 
 function pageScroll() {
-    window.scrollBy(0, 1);
+    window.scrollBy(0, 10);
     scrolldelay = setTimeout(pageScroll, 2000);
 }
 
