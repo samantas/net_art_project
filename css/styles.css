@@ -28,20 +28,20 @@
 
 @keyframes animate {
     0% {
-        transform: rotate(0deg) skew(0deg, 0deg);
+        transform: translate(-50%, -50%) rotate(0deg) skew(0deg, 0deg);
     }
 
     50% {
-        transform: rotate(180deg) skew(20deg, 30deg);
+        transform: translate(-50%, -50%) rotate(180deg) skew(20deg, 30deg);
     }
 
     100% {
-        transform: rotate(360deg) skew(0deg, 0deg);
+        transform: translate(-50%, -50%) rotate(360deg) skew(0deg, 0deg);
     }
 }
 
 .animate {
-    animation: animate 2s infinite forwards ease-in-out;
+    animation: animate 5s infinite forwards ease;
 }
 
 * {

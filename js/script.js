@@ -3,7 +3,7 @@ class Shape {
         this.height = height;
         this.width = width;
         this.shapeType = shapeType;
-        // this.borderRadius = getRandomInt(0, 100);
+        this.borderRadius = getRandomInt(0, 100);
         // this.rotate = getRandomInt(0, 100);
         // this.scaleX = getRandomInt(0, 3);
         // this.scaleY = getRandomInt(0, 3);
@@ -19,15 +19,8 @@ class Shape {
             "height": this.height,
             "borderRadius": this.borderRadius,
             "transform": "translate(-50%,-50%)"
-            // "transform": "translate(-50%,-50%) rotate(" + this.rotate + "deg) scaleX(" + this.scaleX + ") scaleY(" + this.scaleY + ")"
         });
     }
-
-    // transform() {
-    //     $('.shape').css({
-    //         "transform": "translate(-50%,-50%) rotate(" + this.rotate + "deg) scaleX(" + this.scaleX + ") scaleY(" + this.scaleY + ")"
-    //     });
-    // }
 }
 
 const shapeTypes = [
@@ -70,40 +63,56 @@ function animateShapeOnClick() {
 // birth = black and white
 // peak = saturated colors
 // near death = black and white
-// deat = completely black
+// death = completely black
 
+// audio variables
+let song = document.getElementById('audio');
+song.src = 'assets/lies.mp3';
+var isPlaying = false;
+
+function toggleMusic() {
+    var playPromise = song.play();
+
+    if (playPromise !== undefined) {
+        playPromise.then(_ => {
+                if (!isPlaying) {
+                    song.play();
+                    isPlaying = true;
+
+                } else if (isPlaying) {
+
+                    song.pause();
+                    isPlaying = false;
+
+                }
+            })
+            .catch(error => {
+                // Auto-play was prevented
+                // Show paused UI.
+                song.pause();
+            });
+    }
+}
+
+// all things that happen on scroll
 function triggerAndTransformShapesOnScroll() {
+
+    // shape variables
     let shapes = [];
     let shape = $('.shape');
     let shapeHeight = shape.height();
     let shapeWidth = shape.width();
-    let scrollPosition;
 
-    $(window).scroll(function() {
+    // scroll variables
+    let scrollPosition;
+    let scroll = $(window).scrollTop();
+
+    $(window).scroll(function(e) {
         let shapeType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
-        let scroll = $(window).scrollTop();
         let windowHeight = $(window).height();
         let documentHeight = $(document).height();
 
-        // if (scroll === 500) {
-        // 	console.log("scroll = " + scroll);
-        //     $(window).off("scroll");
-        //     let newShape = new Shape(getRandomInt(0, 1000), getRandomInt(0, 700), shapeType).display();
-        //     $(newShape).fadeIn('slow', function() {
-        //         setTimeout(function() {
-        //             $(newShape).fadeOut('slow');
-        //             $(newShape).fadeIn('slow');
-        //             setTimeout(function() {
-        //                 $(newShape).fadeOut('slow');
-        //                 $(newShape).fadeIn('slow');
-        //                 setTimeout(function() {
-        //                     $(newShape).fadeOut('slow');
-        //                     $(newShape).fadeIn('slow');
-        //                 }, 2000)
-        //             }, 2000)
-        //         }, 2000);
-        //     })
-        // }
+        console.log(checkScrollSpeed());
 
         for (let i = 0; i < 1; i++) {
             let shapeType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
@@ -113,10 +122,6 @@ function triggerAndTransformShapesOnScroll() {
         for (let i = 0; i < shapes.length; i++) {
             shapes[i].display();
         }
-
-        // scrollPosition = $(this).scrollTop();
-        // shape.height(shapeHeight - scrollPosition);
-        // shape.width(shapeWidth - scrollPosition);
 
         if (scroll + windowHeight == documentHeight) {
             // fade everything out
@@ -133,32 +138,48 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function checkIfAudioIsPlaying() {
-    let myAudio = $('#audio');
+var checkScrollSpeed = (function(settings) {
+    settings = settings || {};
 
-    // ########################
-    // WHY IS THIS UNDEFINED???
-    console.log("duration: " + myAudio.duration);
+    var lastPos, newPos, timer, delta,
+        delay = settings.delay || 50; // in "ms" (higher means lower fidelity )
 
-    if (myAudio.duration > 0 && !myAudio.paused) {
-        //Its playing...do your job
-        console.log("audio is playing");
-
-    } else {
-        //Not playing...maybe paused, stopped or never played.
-        console.log("audio is not playing");
-
+    function clear() {
+        lastPos = null;
+        delta = 0;
     }
-}
+
+    clear();
+
+    return function() {
+        newPos = window.scrollY;
+        if (lastPos != null) { // && newPos < maxScroll 
+            delta = newPos - lastPos;
+        }
+        lastPos = newPos;
+        clearTimeout(timer);
+        timer = setTimeout(clear, delay);
+        return delta;
+    };
+})();
+
+// Auto scroll the page
+// function pageScroll() {
+//     window.scrollBy(0, 1);
+//     scrolldelay = setTimeout(pageScroll, 10);
+// }
 
 function init() {
-    $(this).scrollTop(0);
+    $(window).scrollTop(0);
     triggerAndTransformShapesOnScroll();
     animateShapeOnClick();
     $('.escher').addClass('scaleInSlowly');
 
     detectScrollBehavior();
-    checkIfAudioIsPlaying();
+    $(document).on("keypress", function(e) {
+        // use e.which
+        toggleMusic();
+    });
 }
 
 $(document).ready(init);
