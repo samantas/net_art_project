@@ -1,7 +1,3 @@
-// need to separate triangle out from other shapes because of the way it's styled
-// i.e. height and width have to remain 0,0
-// and need to manipulate border-radius instead
-
 // also look into changing saturation based on scroll
 // should be the most saturdated in the middle of scroll, i.e. peak of life
 // birth = black and white
@@ -9,7 +5,14 @@
 // near death = black and white
 // death = completely black
 
-// add some illustrations to represent growth / life
+// add some illustrations to represent growth / life?
+
+// assign unique IDs to each shape
+function assignUniqueIdsToShapes() {
+    $.each($('.shape'), function(ind) {
+        $(this).attr('id', 'shape-' + parseInt(ind + 1));
+    });
+}
 
 class Triangle {
     constructor(borderTop, borderBottom, borderRight, borderLeft) {
@@ -26,6 +29,19 @@ class Triangle {
             "borderLeft": this.borderLeft,
             "borderTop": this.borderTop,
             "borderBottom": this.borderBottom,
+        });
+    }
+
+    style() {
+        // instead of appending and styling
+        // append separately and then add styles
+        // for each unique ID
+        // so there are many more different shapes
+    }
+
+    assignID() {
+        $.each($('.triangle'), function(ind) {
+            $(this).attr('id', 'shape-' + parseInt(ind + 1));
         });
     }
 }
@@ -50,11 +66,37 @@ class Circle {
 }
 
 class Square {
+    constructor(width, height, backgroundColor) {
+        this.height = height;
+        this.width = width;
+        this.backgroundColor = backgroundColor;
+    }
 
+    append() {
+        $('.container').append('<div class="shape square"></div>');
+        $('.square').css({
+            "width": this.width,
+            "height": this.width,
+            "background-color": this.backgroundColor
+        });
+    }
 }
 
 class Rectangle {
+    constructor(width, height, backgroundColor) {
+        this.height = height;
+        this.width = width;
+        this.backgroundColor = backgroundColor;
+    }
 
+    append() {
+        $('.container').append('<div class="shape rectangle"></div>');
+        $('.rectangle').css({
+            "width": this.width,
+            "height": this.height,
+            "background-color": this.backgroundColor
+        });
+    }
 }
 
 class Ripple {
@@ -148,40 +190,46 @@ function toggleMusic() {
                 song.pause();
                 stopScroll();
                 pauseBackgroundAnimation();
-
             });
     }
 }
 
-// ###
-// global variables
-let windowHeight = $(window).height();
-let documentHeight = $(document).height();
-
 // scroll variables
 let scroll = $(window).scrollTop();
+let triggerDelay;
+let resetScroll;
+
+var scrollHandler = function() {
+    scroll = $(window).scrollTop();
+}
+
+// WTF WHY DOES THIS NOT WORK???
+var numItems = $('.triangle').length;
 
 // trigger shapes on scroll
 function triggerShapesOnScroll() {
 
-    // shape variables
-    // let shapes = [];
-    // let shape = $('.shape');
-    // let shapeHeight = shape.height();
-    // let shapeWidth = shape.width();
-
-    $(window).on('scroll');
-
     $(window).scroll(function(e) {
+        triggerDelay = setInterval(function() {
+            let newTriangle = new Triangle(getRandomInt(0, 200) + "px solid " + getRandomColor(), "none", getRandomInt(0, 200) + "px solid transparent", getRandomInt(0, 200) + "px solid transparent").append();
+            let newCircle = new Circle(getRandomInt(0, 200), this.width, "100%", getRandomColor()).append();
+            let newSquare = new Square(getRandomInt(0, 200), this.width, getRandomColor()).append();
+            let newRectangle = new Rectangle(getRandomInt(0, 200), getRandomInt(0, 200), getRandomColor()).append();
 
-        setInterval(function() {
-        	let newTriangle = new Triangle(getRandomInt(0, 200) + "px solid " + getRandomColor(), "none", getRandomInt(0, 200) + "px solid transparent", getRandomInt(0, 200) + "px solid transparent").append();
-        	let newCircle = new Circle(getRandomInt(0, 200), this.width, "100%", getRandomColor()).append();
-        	$(window).off('scroll');
-        }, 3000);
+            // assignUniqueIdsToShapes();
 
+            // DAFUQ???
+            // WHY DOES THIS RETURN 0???
+            // WHEN IT IS CLEARLY NOT 0
+            console.log("numItems: " + numItems);
+
+            $(window).off('scroll', scrollHandler);
+        }, 5000);
     });
 
+    resetScroll = setInterval(function() {
+        $(window).on('scroll', scrollHandler);
+    }, 5000);
 }
 
 // ###
@@ -234,15 +282,19 @@ var checkScrollSpeed = (function(settings) {
 
 // ###
 // Toggle auto scroll
-let scrolldelay;
+let scrollDelay;
 
 function pageScroll() {
-    window.scrollBy(0, 10);
-    scrolldelay = setTimeout(pageScroll, 2000);
+    window.scrollBy(0, 5);
+    scrollDelay = setTimeout(pageScroll, 2000);
 }
 
 function stopScroll() {
-    clearTimeout(scrolldelay);
+    clearTimeout(scrollDelay);
+
+    // ALSO WHY DOES THIS NOT WORK???
+    clearInterval(triggerDelay);
+    clearInterval(resetScroll);
 }
 
 // ###
@@ -252,7 +304,9 @@ function stopScroll() {
 // also reduce saturation in color
 function checkScrollPosition() {
     if (scroll > 2000) {
-    	console.log("scroll position = " + scroll);
+        // THIS DOES NOT SEEM TO WORK???
+        console.log("scroll position = " + scroll);
+        $('.container').remove('.shape');
     } else {
 
     }
@@ -271,7 +325,9 @@ function pauseBackgroundAnimation() {
 // Initialize experience
 function init() {
     $(window).scrollTop(0);
+
     triggerShapesOnScroll();
+
     animateShapeOnClick();
 
     $(document).on("keypress", function(e) {
