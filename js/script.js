@@ -2,6 +2,15 @@
 // i.e. height and width have to remain 0,0
 // and need to manipulate border-radius instead
 
+// also look into changing saturation based on scroll
+// should be the most saturdated in the middle of scroll, i.e. peak of life
+// birth = black and white
+// peak = saturated colors
+// near death = black and white
+// death = completely black
+
+// add some illustrations to represent growth / life
+
 const shapeTypes = [
     "circle",
     "triangle",
@@ -14,9 +23,6 @@ class Shape {
         this.width = width;
         this.shapeType = shapeType;
         this.borderRadius = getRandomInt(0, 100);
-        // this.rotate = getRandomInt(0, 100);
-        // this.scaleX = getRandomInt(0, 3);
-        // this.scaleY = getRandomInt(0, 3);
     }
 
     display() {
@@ -33,6 +39,33 @@ class Shape {
     }
 }
 
+class Ripple {
+    constructor(x, y, width, height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+    append() {
+        $('.container').append('<div class="ripple heartbeat"></div>');
+        $('.ripple').css({
+            "top": this.y + "px",
+            "left": this.x + "px",
+            "width": this.width,
+            "height": this.height,
+            "borderRadius": "50%"
+        })
+    }
+}
+
+function newShapeOnClick() {
+    let newRipple;
+    $(window).click(function(e) {
+        newRipple = new Ripple(e.clientX, e.clientY, 100, 100).append();
+    });
+}
+
 // ###
 // animate shapes on click via keyframe
 function animateShapeOnClick() {
@@ -44,17 +77,6 @@ function animateShapeOnClick() {
         }
     });
 }
-
-// look into changing div size dynamically on scroll
-// https://stackoverflow.com/questions/31005636/adjust-div-height-dynamically-based-on-scroll
-
-// also look into changing saturation based on scroll
-// should be the most saturdated in the middle of scroll, i.e. peak of life
-// birth = black and white
-// peak = saturated colors
-// near death = black and white
-// death = completely black
-
 
 function manipulateMusicBasedOnScrollSpeed() {
     $(window).scroll(function() {
@@ -221,6 +243,7 @@ function init() {
 
     });
 
+    newShapeOnClick();
     manipulateMusicBasedOnScrollSpeed();
 
     fadeOutAtBottomOfPage();
