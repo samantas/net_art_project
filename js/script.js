@@ -11,32 +11,50 @@
 
 // add some illustrations to represent growth / life
 
-const shapeTypes = [
-    "circle",
-    "triangle",
-    "rectangle"
-];
-
-class Shape {
-    constructor(height, width, shapeType) {
-        this.height = height;
-        this.width = width;
-        this.shapeType = shapeType;
-        this.borderRadius = getRandomInt(0, 100);
+class Triangle {
+    constructor(borderTop, borderBottom, borderRight, borderLeft) {
+        this.borderTop = borderTop;
+        this.borderBottom = borderBottom;
+        this.borderRight = borderRight;
+        this.borderLeft = borderLeft;
     }
 
-    display() {
-        $('.container').append('<div class="shape ' + this.shapeType + '"></div>')
-        $('.shape').css({
-            "position": "fixed",
-            "top": "50%",
-            "left": "50%",
-            "width": this.width,
-            "height": this.height,
-            // "borderRadius": this.borderRadius,
-            "transform": "translate(-50%,-50%)"
+    append() {
+        $('.container').append('<div class="shape triangle"></div>');
+        $('.triangle').css({
+            "borderRight": this.borderRight,
+            "borderLeft": this.borderLeft,
+            "borderTop": this.borderTop,
+            "borderBottom": this.borderBottom,
         });
     }
+}
+
+class Circle {
+    constructor(width, height, borderRadius, backgroundColor) {
+        this.height = height;
+        this.width = width;
+        this.borderRadius = borderRadius;
+        this.backgroundColor = backgroundColor;
+    }
+
+    append() {
+        $('.container').append('<div class="shape circle"></div>');
+        $('.circle').css({
+            "width": this.width,
+            "height": this.width,
+            "borderRadius": this.borderRadius,
+            "background-color": this.backgroundColor
+        });
+    }
+}
+
+class Square {
+
+}
+
+class Rectangle {
+
 }
 
 class Ripple {
@@ -59,11 +77,21 @@ class Ripple {
     }
 }
 
-function newShapeOnClick() {
+function newRippleOnClick() {
     let newRipple;
     $(window).click(function(e) {
         newRipple = new Ripple(e.clientX, e.clientY, 100, 100).append();
     });
+}
+
+// random color generator
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }
 
 // ###
@@ -89,7 +117,6 @@ function manipulateMusicBasedOnScrollSpeed() {
         }
     });
 }
-
 
 // ###
 // audio variables
@@ -118,8 +145,6 @@ function toggleMusic() {
                 }
             })
             .catch(error => {
-                // Auto-play was prevented
-                // Show paused UI.
                 song.pause();
                 stopScroll();
                 pauseBackgroundAnimation();
@@ -137,25 +162,23 @@ let documentHeight = $(document).height();
 let scroll = $(window).scrollTop();
 
 // trigger shapes on scroll
-function triggerAndTransformShapesOnScroll() {
+function triggerShapesOnScroll() {
 
     // shape variables
-    let shapes = [];
-    let shape = $('.shape');
-    let shapeHeight = shape.height();
-    let shapeWidth = shape.width();
+    // let shapes = [];
+    // let shape = $('.shape');
+    // let shapeHeight = shape.height();
+    // let shapeWidth = shape.width();
 
+    $(window).on('scroll');
+    
     $(window).scroll(function(e) {
-        let shapeType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
 
-        for (let i = 0; i < 1; i++) {
-            let shapeType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
-            shapes[i] = new Shape(getRandomInt(0, 500), getRandomInt(0, 1000), shapeType);
-        }
-
-        for (let i = 0; i < shapes.length; i++) {
-            shapes[i].display();
-        }
+        setInterval(function() {
+        	let newTriangle = new Triangle(getRandomInt(0, 200) + "px solid " + getRandomColor(), "none", getRandomInt(0, 200) + "px solid transparent", getRandomInt(0, 200) + "px solid transparent").append();
+        	let newCircle = new Circle(getRandomInt(0, 200), this.width, "100%", getRandomColor()).append();
+        	$(window).off('scroll');
+        }, 3000);
 
     });
 
@@ -222,6 +245,14 @@ function stopScroll() {
     clearTimeout(scrolldelay);
 }
 
+function checkScrollPosition() {
+    if (scroll > 2000) {
+
+    } else {
+
+    }
+}
+
 function startBackgroundAnimation() {
     $('.escher').addClass('scaleInSlowly');
     $('.escher').removeClass('pausedAnimation');
@@ -235,15 +266,22 @@ function pauseBackgroundAnimation() {
 // Initialize experience
 function init() {
     $(window).scrollTop(0);
-    triggerAndTransformShapesOnScroll();
+    triggerShapesOnScroll();
     animateShapeOnClick();
 
     $(document).on("keypress", function(e) {
-        toggleMusic();
+        if (e.keyCode == 13) {
 
+            toggleMusic();
+
+            $('.title').css({
+                "display": "none"
+            })
+
+        } else {}
     });
 
-    newShapeOnClick();
+    newRippleOnClick();
     manipulateMusicBasedOnScrollSpeed();
 
     fadeOutAtBottomOfPage();
