@@ -171,7 +171,7 @@ function triggerShapesOnScroll() {
     // let shapeWidth = shape.width();
 
     $(window).on('scroll');
-    
+
     $(window).scroll(function(e) {
 
         setInterval(function() {
@@ -245,9 +245,14 @@ function stopScroll() {
     clearTimeout(scrolldelay);
 }
 
+// ###
+// check scroll position
+// if scroll position is middle of page, then start to reduce shapes
+// instead of adding
+// also reduce saturation in color
 function checkScrollPosition() {
     if (scroll > 2000) {
-
+    	console.log("scroll position = " + scroll);
     } else {
 
     }
@@ -283,6 +288,8 @@ function init() {
 
     newRippleOnClick();
     manipulateMusicBasedOnScrollSpeed();
+
+    checkScrollPosition();
 
     fadeOutAtBottomOfPage();
 
