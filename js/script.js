@@ -1,3 +1,7 @@
+// need to separate triangle out from other shapes because of the way it's styled
+// i.e. height and width have to remain 0,0
+// and need to manipulate border-radius instead
+
 const shapeTypes = [
     "circle",
     "triangle",
@@ -23,7 +27,7 @@ class Shape {
             "left": "50%",
             "width": this.width,
             "height": this.height,
-            "borderRadius": this.borderRadius,
+            // "borderRadius": this.borderRadius,
             "transform": "translate(-50%,-50%)"
         });
     }
@@ -58,8 +62,7 @@ function manipulateMusicBasedOnScrollSpeed() {
         console.log(speed);
         if (speed > 15) {
             song.playbackRate = 2.0;
-        }
-        else {
+        } else {
             song.playbackRate = 1.0;
         }
     });
@@ -87,6 +90,7 @@ function toggleMusic() {
                 } else if (isPlaying) {
                     song.pause();
                     stopScroll();
+                    pauseBackgroundAnimation();
                     isPlaying = false;
 
                 }
@@ -96,6 +100,7 @@ function toggleMusic() {
                 // Show paused UI.
                 song.pause();
                 stopScroll();
+                pauseBackgroundAnimation();
 
             });
     }
@@ -123,7 +128,7 @@ function triggerAndTransformShapesOnScroll() {
 
         for (let i = 0; i < 1; i++) {
             let shapeType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
-            shapes[i] = new Shape(getRandomInt(0, 1000), getRandomInt(0, 700), shapeType);
+            shapes[i] = new Shape(getRandomInt(0, 500), getRandomInt(0, 1000), shapeType);
         }
 
         for (let i = 0; i < shapes.length; i++) {
@@ -144,6 +149,7 @@ function fadeOutAtBottomOfPage() {
                 opacity: 0
             }, 1000);
             toggleMusic();
+            song.muted = true;
         }
     };
 }
@@ -193,10 +199,14 @@ function pageScroll() {
 function stopScroll() {
     clearTimeout(scrolldelay);
 }
-// ###
 
 function startBackgroundAnimation() {
     $('.escher').addClass('scaleInSlowly');
+    $('.escher').removeClass('pausedAnimation');
+}
+
+function pauseBackgroundAnimation() {
+    $('.escher').addClass('pausedAnimation');
 }
 
 // ###
@@ -207,8 +217,8 @@ function init() {
     animateShapeOnClick();
 
     $(document).on("keypress", function(e) {
-        // use e.which
         toggleMusic();
+
     });
 
     manipulateMusicBasedOnScrollSpeed();

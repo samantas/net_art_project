@@ -13,35 +13,43 @@
 }
 
 @keyframes scaleRotateAndSkewShapes {
-	from {
-		transform: translate(-50%, -50%);
-	}
+    from {
+        transform: translate(-50%, -50%);
+    }
 
-	to {
-		transform: translate(-50%, -50%) scale(3,3) rotate(360deg) skew(360deg);
-	}
+    to {
+        transform: translate(-50%, -50%) scale(3, 3) rotate(360deg) skew(360deg);
+    }
 }
 
 .scaleRotateAndSkewShapes {
-	animation: scaleRotateAndSkewShapes 2s forwards ease-in;
+    animation: scaleRotateAndSkewShapes 2s forwards ease-in;
 }
 
 @keyframes animate {
     0% {
-        transform: translate(-50%, -50%) rotate(0deg) skew(0deg, 0deg);
+        transform: translate(-50%, -50%);
+        /* transform: translate(-50%, -50%) rotate(0deg); */
+        opacity: 1;
     }
 
     50% {
-        transform: translate(-50%, -50%) rotate(180deg) skew(20deg, 30deg);
+        /* transform: translate(-50%, -50%) rotate(180deg); */
     }
 
     100% {
-        transform: translate(-50%, -50%) rotate(360deg) skew(0deg, 0deg);
+        /* transform: translate(-50%, -50%) rotate(360deg); */
+        transform: translate(-50%, -50%) scale(10,10);
+        opacity: 0;
     }
 }
 
 .animate {
-    animation: animate 5s infinite forwards ease;
+    animation: animate 20s infinite forwards ease;
+}
+
+.pausedAnimation {
+    animation-play-state: paused !important;
 }
 
 * {
@@ -80,22 +88,22 @@ body {
 }
 
 .audio-container {
-	position: fixed;
-	display: flex;
-	justify-content: center;
-	z-index: 999;
-	width: 100%;
-	bottom: 0;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    z-index: 999;
+    width: 100%;
+    bottom: 0;
 }
 
 .audio-container audio {
-	width: calc(100% - 20px);
-	margin-bottom: 10px;
+    width: calc(100% - 20px);
+    margin-bottom: 10px;
 }
 
 .human {
-	position: relative;
-	top: 100px;
+    position: relative;
+    top: 100px;
 }
 
 .shape {
