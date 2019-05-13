@@ -1,3 +1,7 @@
+// at the end add some simple text
+// 
+
+
 // also look into changing saturation based on scroll
 // should be the most saturdated in the middle of scroll, i.e. peak of life
 // birth = black and white
@@ -142,6 +146,9 @@ function animateShapeOnClick() {
     $('.container').click(function() {
         if ($('.shape').hasClass("animate")) {
             $('.shape').removeClass("animate");
+            // instead of removing class animate
+            // add class animateBackwards
+            // change animate to animateForwards
         } else {
             $('.shape').addClass("animate");
         }
@@ -175,12 +182,14 @@ function toggleMusic() {
                 if (!isPlaying) {
                     song.play();
                     pageScroll();
+                    triggerShapes();
                     startBackgroundAnimation();
                     isPlaying = true;
 
                 } else if (isPlaying) {
                     song.pause();
                     stopScroll();
+                    clearInterval(triggerDelay);
                     pauseBackgroundAnimation();
                     isPlaying = false;
 
@@ -189,7 +198,9 @@ function toggleMusic() {
             .catch(error => {
                 song.pause();
                 stopScroll();
+                clearInterval(triggerDelay);
                 pauseBackgroundAnimation();
+                isPlaying = false;
             });
     }
 }
@@ -203,33 +214,29 @@ var scrollHandler = function() {
     scroll = $(window).scrollTop();
 }
 
-// WTF WHY DOES THIS NOT WORK???
-var numItems = $('.triangle').length;
-
+// ###
 // trigger shapes on scroll
-function triggerShapesOnScroll() {
+function triggerShapes() {
+    // $(window).scroll(function(e) {
 
-    $(window).scroll(function(e) {
-        triggerDelay = setInterval(function() {
-            let newTriangle = new Triangle(getRandomInt(0, 200) + "px solid " + getRandomColor(), "none", getRandomInt(0, 200) + "px solid transparent", getRandomInt(0, 200) + "px solid transparent").append();
-            let newCircle = new Circle(getRandomInt(0, 200), this.width, "100%", getRandomColor()).append();
-            let newSquare = new Square(getRandomInt(0, 200), this.width, getRandomColor()).append();
-            let newRectangle = new Rectangle(getRandomInt(0, 200), getRandomInt(0, 200), getRandomColor()).append();
+    triggerDelay = setInterval(function() {
+        let newTriangle = new Triangle(getRandomInt(0, 200) + "px solid " + getRandomColor(), "none", getRandomInt(0, 200) + "px solid transparent", getRandomInt(0, 200) + "px solid transparent").append();
+        let newCircle = new Circle(getRandomInt(0, 200), this.width, "100%", getRandomColor()).append();
+        let newSquare = new Square(getRandomInt(0, 200), this.width, getRandomColor()).append();
+        let newRectangle = new Rectangle(getRandomInt(0, 200), getRandomInt(0, 200), getRandomColor()).append();
 
-            // assignUniqueIdsToShapes();
+        // add counter
 
-            // DAFUQ???
-            // WHY DOES THIS RETURN 0???
-            // WHEN IT IS CLEARLY NOT 0
-            console.log("numItems: " + numItems);
+        // assignUniqueIdsToShapes();
 
-            $(window).off('scroll', scrollHandler);
-        }, 5000);
-    });
+        $(window).off('scroll', scrollHandler);
+    }, 3000);
+
+    // });
 
     resetScroll = setInterval(function() {
         $(window).on('scroll', scrollHandler);
-    }, 5000);
+    }, 3000);
 }
 
 // ###
@@ -284,17 +291,25 @@ var checkScrollSpeed = (function(settings) {
 // Toggle auto scroll
 let scrollDelay;
 
+
+// try this!
+
+let x = 1; // y-axis px displacemnet
+let y = 1000; // delay in ms
+
 function pageScroll() {
-    window.scrollBy(0, 5);
-    scrollDelay = setTimeout(pageScroll, 2000);
+    // window.scrollBy(0, 100);
+    // scrollDelay = setTimeout(pageScroll, 2000);
+
+    scrollDelay = setInterval(function() {
+        window.scroll(0, x);
+        x = x + 5;
+    }, y);
+
 }
 
 function stopScroll() {
     clearTimeout(scrollDelay);
-
-    // ALSO WHY DOES THIS NOT WORK???
-    clearInterval(triggerDelay);
-    clearInterval(resetScroll);
 }
 
 // ###
@@ -326,8 +341,6 @@ function pauseBackgroundAnimation() {
 function init() {
     $(window).scrollTop(0);
 
-    triggerShapesOnScroll();
-
     animateShapeOnClick();
 
     $(document).on("keypress", function(e) {
@@ -337,7 +350,7 @@ function init() {
 
             $('.title').css({
                 "display": "none"
-            })
+            });
 
         } else {}
     });

@@ -93,7 +93,7 @@
 
 @keyframes animate {
     0% {
-        transform: translate(-50%, -50%);
+        transform: scale(1, 1);
         /* transform: translate(-50%, -50%) rotate(0deg); */
         opacity: 1;
     }
@@ -104,7 +104,7 @@
 
     100% {
         /* transform: translate(-50%, -50%) rotate(360deg); */
-        transform: translate(-50%, -50%) scale(5, 5);
+        transform: scale(5, 5);
         opacity: 0;
     }
 }
@@ -126,6 +126,7 @@ body {
     min-height: 100%;
     max-width: 100%;
     overflow-x: hidden;
+    overflow-y: auto;
 }
 
 body {
