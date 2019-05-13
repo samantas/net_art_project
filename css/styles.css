@@ -157,7 +157,8 @@ body {
 }
 
 .intro-text span {
-    margin: 10px 0;
+    margin: 10px auto;
+    text-align: center;
 }
 
 .intro {
@@ -281,5 +282,12 @@ body {
     position: fixed;
     border: 1px solid #fff;
     z-index: 999;
+
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 2) {
+    .escher {
+        display: none;
+    }
 
 }
