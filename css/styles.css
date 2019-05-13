@@ -175,6 +175,21 @@ body {
     opacity: 1;
 }
 
+.outro {
+    position: fixed;
+    display: flex;
+    z-index: 999;
+    color: #fff;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    flex-direction: column;
+    opacity: 0;
+}
+
 .title {
     display: flex;
     position: fixed;

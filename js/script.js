@@ -252,6 +252,10 @@ function fadeOutAtBottomOfPage() {
                 }, 1000);
                 toggleMusic();
                 song.muted = true;
+
+                $('.outro').animate({
+                    opacity: 1
+                }, 1000);
             }
         };
     }, 1000);
@@ -346,9 +350,7 @@ function init() {
 
     $('.intro-text').animate({
         opacity: 1
-    }, 2000, function() {
-        // Animation complete
-    });
+    }, 2000, function() {});
 
     $('.container').css("display", "none");
 
@@ -376,6 +378,10 @@ function init() {
     checkScrollPosition();
 
     fadeOutAtBottomOfPage();
+
+    $('#restart').click(function() {
+        location.reload();
+    });
 }
 
 // ###
