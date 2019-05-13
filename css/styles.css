@@ -276,7 +276,6 @@ body {
     background-color: transparent;
 }
 
-
 .ripple {
     transform: translate(-50%, -50%);
     position: fixed;
@@ -285,9 +284,31 @@ body {
 
 }
 
+.mobile-start {
+    display: none;
+}
+
 @media only screen and (min-device-width: 320px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 2) {
     .escher {
         display: none;
+    }
+
+    .desktop-start {
+        display: none;
+    }
+    
+    .mobile-start {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .start-btn {
+    	display: flex;
+    	align-self: center;
+    	padding: 15px 30px;
+    	margin: 25px auto 10px;
+    	border: 1px solid #fff;
+    	border-radius: 3px;
     }
 
 }

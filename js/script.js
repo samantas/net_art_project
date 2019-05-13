@@ -246,7 +246,7 @@ function fadeOutAtBottomOfPage() {
     wait = setTimeout(function() {
         window.onscroll = function(ev) {
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                
+
                 $('.everything').animate({
                     opacity: 0
                 }, 1000);
@@ -367,13 +367,23 @@ function init() {
             $(".intro").animate({
                 opacity: 0,
                 display: "toggle"
-            }, 2000, function() {
-                // Animation complete.
-            });
+            }, 2000, function() {});
 
             $('.container').css("display", "flex");
 
         } else {}
+    });
+
+    $('#startBtn').click(function() {
+        toggleMusic();
+        handleShapeAnimation();
+
+        $(".intro").animate({
+            opacity: 0,
+            display: "toggle"
+        }, 2000, function() {});
+
+        $('.container').css("display", "flex");
     });
 
     newRippleOnClick();
