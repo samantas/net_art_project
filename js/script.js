@@ -1,5 +1,6 @@
-// at the end add some simple text
-// 
+// at the end add some simple text -- 'fin' or 'death'
+// add a refresh button --> reset experience
+// add a note to reference the original M.C. Escher piece
 
 
 // also look into changing saturation based on scroll
@@ -144,13 +145,12 @@ function getRandomColor() {
 // animate shapes on click via keyframe
 function animateShapeOnClick() {
     $('.container').click(function() {
-        if ($('.shape').hasClass("animate")) {
-            $('.shape').removeClass("animate");
-            // instead of removing class animate
-            // add class animateBackwards
-            // change animate to animateForwards
+        if ($('.shape').hasClass("animateIn")) {
+            $('.shape').removeClass("animateIn");
+            $('.shape').addClass("animateOut");
         } else {
-            $('.shape').addClass("animate");
+            $('.shape').addClass("animateIn");
+            $('.shape').removeClass("animateOut");
         }
     });
 }
@@ -159,7 +159,7 @@ function manipulateMusicBasedOnScrollSpeed() {
     $(window).scroll(function() {
         var speed = (checkScrollSpeed());
         console.log(speed);
-        if (speed > 15) {
+        if (speed > 20) {
             song.playbackRate = 2.0;
         } else {
             song.playbackRate = 1.0;
@@ -242,16 +242,19 @@ function triggerShapes() {
 // ###
 // Stop music and fade out at the bottom of the page
 function fadeOutAtBottomOfPage() {
-    window.onscroll = function(ev) {
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-            // you're at the bottom of the page
-            $('.everything').animate({
-                opacity: 0
-            }, 1000);
-            toggleMusic();
-            song.muted = true;
-        }
-    };
+    var wait;
+    wait = setTimeout(function() {
+        window.onscroll = function(ev) {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                // you're at the bottom of the page
+                $('.everything').animate({
+                    opacity: 0
+                }, 1000);
+                toggleMusic();
+                song.muted = true;
+            }
+        };
+    }, 1000);
 }
 
 // ###
@@ -289,22 +292,12 @@ var checkScrollSpeed = (function(settings) {
 
 // ###
 // Toggle auto scroll
+
 let scrollDelay;
 
-
-// try this!
-
-let x = 1; // y-axis px displacemnet
-let y = 1000; // delay in ms
-
 function pageScroll() {
-    // window.scrollBy(0, 100);
-    // scrollDelay = setTimeout(pageScroll, 2000);
-
-    scrollDelay = setInterval(function() {
-        window.scroll(0, x);
-        x = x + 5;
-    }, y);
+    window.scrollBy(0, 100);
+    scrollDelay = setTimeout(pageScroll, 2000);
 
 }
 
@@ -314,14 +307,10 @@ function stopScroll() {
 
 // ###
 // check scroll position
-// if scroll position is middle of page, then start to reduce shapes
-// instead of adding
-// also reduce saturation in color
+// reduce saturation in color???
 function checkScrollPosition() {
     if (scroll > 2000) {
-        // THIS DOES NOT SEEM TO WORK???
-        console.log("scroll position = " + scroll);
-        $('.container').remove('.shape');
+
     } else {
 
     }
@@ -336,6 +325,18 @@ function pauseBackgroundAnimation() {
     $('.escher').addClass('pausedAnimation');
 }
 
+function handleShapeAnimation() {
+    let shape = $('.shape');
+
+    if (shape.hasClass('animateIn' || 'animateOut')) {
+        $('.shape').addClass('pausedAnimation');
+    } else if (shape.hasClass('pausedAnimation')) {
+        $('.shape').removeClass('pausedAnimation');
+    } else {
+
+    }
+}
+
 // ###
 // Initialize experience
 function init() {
@@ -343,14 +344,28 @@ function init() {
 
     animateShapeOnClick();
 
+    $('.intro-text').animate({
+        opacity: 1
+    }, 2000, function() {
+        // Animation complete
+    });
+
+    $('.container').css("display", "none");
+
     $(document).on("keypress", function(e) {
         if (e.keyCode == 13) {
 
             toggleMusic();
+            handleShapeAnimation();
 
-            $('.title').css({
-                "display": "none"
+            $(".intro").animate({
+                opacity: 0,
+                display: "toggle"
+            }, 2000, function() {
+                // Animation complete.
             });
+
+            $('.container').css("display", "flex");
 
         } else {}
     });
@@ -361,7 +376,6 @@ function init() {
     checkScrollPosition();
 
     fadeOutAtBottomOfPage();
-
 }
 
 // ###
