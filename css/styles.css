@@ -311,4 +311,8 @@ body {
     	border-radius: 3px;
     }
 
+    .bg-img-credit {
+    	display: none;
+    }
+
 }
