@@ -1,18 +1,6 @@
-// at the end add some simple text -- 'fin' or 'death'
-// add a refresh button --> reset experience
-// add a note to reference the original M.C. Escher piece
-
-
-// also look into changing saturation based on scroll
-// should be the most saturdated in the middle of scroll, i.e. peak of life
-// birth = black and white
-// peak = saturated colors
-// near death = black and white
-// death = completely black
-
-// add some illustrations to represent growth / life?
-
+// ###
 // assign unique IDs to each shape
+// not using this for now
 function assignUniqueIdsToShapes() {
     $.each($('.shape'), function(ind) {
         $(this).attr('id', 'shape-' + parseInt(ind + 1));
@@ -42,6 +30,7 @@ class Triangle {
         // append separately and then add styles
         // for each unique ID
         // so there are many more different shapes
+        // did not get around to this
     }
 
     assignID() {
@@ -205,37 +194,15 @@ function toggleMusic() {
     }
 }
 
-// scroll variables
-let scroll = $(window).scrollTop();
-let triggerDelay;
-let resetScroll;
-
-var scrollHandler = function() {
-    scroll = $(window).scrollTop();
-}
-
 // ###
-// trigger shapes on scroll
+// Trigger shapes after delay
 function triggerShapes() {
-    // $(window).scroll(function(e) {
 
     triggerDelay = setInterval(function() {
         let newTriangle = new Triangle(getRandomInt(0, 200) + "px solid " + getRandomColor(), "none", getRandomInt(0, 200) + "px solid transparent", getRandomInt(0, 200) + "px solid transparent").append();
         let newCircle = new Circle(getRandomInt(0, 200), this.width, "100%", getRandomColor()).append();
         let newSquare = new Square(getRandomInt(0, 200), this.width, getRandomColor()).append();
         let newRectangle = new Rectangle(getRandomInt(0, 200), getRandomInt(0, 200), getRandomColor()).append();
-
-        // add counter
-
-        // assignUniqueIdsToShapes();
-
-        $(window).off('scroll', scrollHandler);
-    }, 3000);
-
-    // });
-
-    resetScroll = setInterval(function() {
-        $(window).on('scroll', scrollHandler);
     }, 3000);
 }
 
@@ -299,10 +266,18 @@ var checkScrollSpeed = (function(settings) {
 })();
 
 // ###
-// Toggle auto scroll
+// scroll variables
+let scroll = $(window).scrollTop();
+let triggerDelay;
+let resetScroll;
+
+var scrollHandler = function() {
+    scroll = $(window).scrollTop();
+}
 
 let scrollDelay;
 
+// Toggle auto scroll
 function pageScroll() {
     window.scrollBy(0, 100);
     scrollDelay = setTimeout(pageScroll, 2000);
@@ -315,7 +290,6 @@ function stopScroll() {
 
 // ###
 // check scroll position
-// reduce saturation in color???
 function checkScrollPosition() {
     if (scroll > 2000) {
 
