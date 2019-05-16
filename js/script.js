@@ -227,6 +227,7 @@ function fadeOutAtBottomOfPage() {
 
                 $('.intro').css("display", "none");
                 $('.everything').css("display", "none");
+                $('.outro').css("z-index", "999");
             }
         };
     }, 1000);
